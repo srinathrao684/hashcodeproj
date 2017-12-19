@@ -4,9 +4,112 @@
   <groupId>com.rns.simpleweb</groupId>
   <artifactId>webapp</artifactId>
   <packaging>war</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>2.2-SNAPSHOT</version>
   <name>webapp Maven Webapp</name>
   <url>http://maven.apache.org</url>
+  
+  <profiles>
+      <profile>
+      <id>test</id>	
+ 
+      <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+               <execution>
+                  <phase>test</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                  <tasks>					 
+                     <echo>Using env.test.properties</echo>
+            <copy file="src/main/resources/test.properties" tofile
+		    ="${project.build.outputDirectory}/env.properties"/>					
+                  </tasks>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+      </build>
+      </profile>
+	  
+	  <profile>
+      <id>prod</id>
+	  <activation>
+	   <os> 
+		   <name>windows server 2008 r2</name> 		    
+	     <family>Windows</family> 
+        <arch>amd64</arch> 
+        <version>6.1</version> 
+    </os>       
+	  </activation>	 
+      <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+               <execution>
+                  <phase>test</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                  <tasks>
+                     <echo>Using env.prod.properties</echo>
+            <copy file="src/main/resources/prod.properties" tofile
+		    ="${project.build.outputDirectory}/env.properties"/>
+                  </tasks>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+      </build>
+      </profile>
+	  
+	  <profile>
+      <id>dev</id>
+	   
+
+      <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+               <execution>
+                  <phase>test</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                  <tasks>
+                     <echo>Using env.normal.properties</echo>
+            <copy file="src/main/resources/dev.properties" tofile
+		    ="${project.build.outputDirectory}/env.properties"/>
+                  </tasks>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+      </build>
+      </profile>
+	  
+   </profiles>
+  
+  
+  
+  
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -18,4 +121,21 @@
   <build>
     <finalName>webapp</finalName>
   </build>
+  
+  
+  <distributionManagement>
+  <repository>
+     <id>deployment</id>
+     <name>Internal Releases</name>
+     <url>http://192.168.225.132:9090/nexus-2.11.4-01/content/repositories/releases/</url>
+  </repository>
+  <snapshotRepository>
+     <id>deployment</id>
+     <name>Internal Releases</name>
+     <url>http://192.168.225.132:9090/nexus-2.11.4-01/content/repositories/snapshots/</url>
+  </snapshotRepository>
+</distributionManagement>
+  
+  
+  
 </project>
